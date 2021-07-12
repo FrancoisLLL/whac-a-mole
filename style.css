@@ -1,0 +1,144 @@
+* {
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+    align-items: center;
+    text-align: center;
+}
+html{
+
+}
+
+.hole {
+    height: 100px;
+    background-color:rgb(85, 66, 38);
+    border-radius: 100%;
+    flex-grow: 1;
+    width: 29%;
+    margin: 2%;
+}
+
+#grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 800px;
+    height: 800px;
+    padding: 80px;
+    margin: 0 auto;
+    background-color: black;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mole{
+    background-color: red;
+}
+
+.mole-lid-top {
+    background-color: black;
+    height: 40px;
+    width: 100px;
+    border-radius: 100%;
+    border: 2px solid white;
+    z-index:29;
+    position:relative;
+    top: 120px;
+} 
+
+
+.mole-lid-body {
+    background-color: black;
+    height: 10px;
+    width: 100px;
+    border-top: 2px solid white ;
+    border-right: 2px solid white ;
+    border-left: 2px solid white ;
+    z-index:28;
+    position:relative;
+    top: 100px;
+} 
+
+.mole-lid-bottom {
+    background-color: black;
+    height: 40px;
+    width: 100px;
+    border-radius: 100%;
+    border: 2px solid white;
+    z-index: 27;
+    position:relative;
+    top: 80px;
+
+} 
+
+.mole-body {
+    background-color: black;
+    height: 90px;
+    width: 100px;
+    border-top: 2px solid white;
+    border-right: 2px solid white;
+    border-left: 2px solid white;
+    z-index: 19;
+    position:relative;
+    top: 60px;
+} 
+
+.mole-eye-right {
+    background-color: black;
+    border: 5px solid white ;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    z-index:20;
+    position:relative;
+    left: 15px;
+    top: 0px;
+} 
+.mole-eye-left {
+    background-color: black;
+    border: 5px solid white ;
+    height: 30px;
+    width: 30px;
+
+    border-radius: 100%;
+    z-index:20;
+    position:relative;
+    top: -30px;
+    left: 55px;
+} 
+
+.mole-mouth {
+    background-color: black;
+    border-bottom: 10px solid white ;
+    height: 30px;
+    width: 50px;
+    border-radius: 100%;
+    z-index:20;
+    position:relative;
+    top: -30px;
+    left: 25px;
+} 
+
+.mole-bottom {
+    background-color: black;
+    height: 40px;
+    width: 100px;
+    border-radius: 100%;
+    border: 2px solid white;
+    z-index:1;
+    position:relative;
+    top: -50px;
+} 
+
+.test {
+    display: flex;
+    justify-content: space-around;
+    overflow: hidden;
+    height:200px;
+}
+
+.molly {
+    transition: ease-in 3s transform;
+    transform: translate(0,-120px);
+    overflow: hidden;
+}
