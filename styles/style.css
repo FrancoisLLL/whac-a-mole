@@ -1,13 +1,19 @@
 * {
     box-sizing: border-box;
-    background-color: black;
-    color: white;
+    /* color: white; */
     align-items: center;
     text-align: center;
     margin: auto;
 }
-html{
 
+#header{
+    height: 100px;
+    width: 700px;
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: black;
 }
 
 .hole {
@@ -28,3 +34,42 @@ html{
     background-color: black; 
     border: 1px solid white;
 }
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: rgba(255,255,255,0.9);
+    margin: 20% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 5px solid white;
+    width: 600px; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+  .close {
+    color: black;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: orangered;
+    text-decoration: none;
+    cursor: pointer;
+  }

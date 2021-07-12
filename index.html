@@ -9,14 +9,26 @@
     <script type="module" src="./script.js"></script>
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="./styles/mole.css">
-
+    <audio autoplay loop id="background-music">
+        <source src="./resource/8Bit Platformer Loop.ogg">
+    </audio>
+    <audio id="hit">
+        <source src="./resource/270341__littlerobotsoundfactory__pickup-04.wav">
+    </audio>
+    <audio id="miss">
+        <source src="./resource/270325__littlerobotsoundfactory__hit-02.wav">
+    </audio>
 </head>
 
 <body>
-    <h1>Whac-A-Mole</h1>
-    <h2>Score : </h2>
-    <h2>Playing since : </h2>
-    <h2>Current speed : </h2>
+    <header id="header"> 
+        <h1>Whac-A-Mole</h1>
+        <p id="score"> Score : </p>
+        <p id="playtime">Playing since : </p>
+        <!-- <p id="speed">Current speed : </p> -->
+        <p id="level">Level : </p>
+    </header>
+
     <div id=grid>
         <div class="hole">
             <div class="moleContainer">
@@ -136,6 +148,17 @@
             </div>
         </div>
     </div>
+
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>Some text in the Modal..</p>
+        </div>
+      
+      </div>
+
 </body>
 
 </html>
