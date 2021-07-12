@@ -1,0 +1,32 @@
+* {
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+    align-items: center;
+    text-align: center;
+}
+html{
+
+}
+
+.hole {
+    height: 100px;
+    background-color:rgb(85, 66, 38);
+    border-radius: 100%;
+    flex-grow: 1;
+    width: 29%;
+    margin: 2%;
+}
+
+#grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 800px;
+    height: 800px;
+    padding: 80px;
+    margin: 0 auto;
+    background-color: black;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+}

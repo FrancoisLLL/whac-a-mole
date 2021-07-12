@@ -1,0 +1,91 @@
+.mole {
+    background-color: black;
+    border: 2px solid white;
+}
+
+.mole.lid {
+    background-color: black;
+    width: 100px;
+    position: relative;
+}
+
+.mole.lid.top, .mole.lid.bottom {
+    height: 20%;
+    z-index: 29;
+    border-radius: 100%;
+}
+
+.mole.lid.top {
+    top:30%;
+}
+
+.mole.lid.body {
+    height: 5%;
+    z-index: 28;
+    top: 20%;
+    border-bottom: 0px;
+}
+
+.mole.lid.bottom {
+    z-index: 27;
+    top: 10%;
+}
+
+.mole.face {
+    width: 100px;
+    height: 40%;
+    position: relative;
+    top: 0%;
+    border-bottom: 0px;
+    z-index: 19;
+    display: flex;
+    justify-content: space-around;
+}
+
+.mole.face .eye{  
+    border-radius: 100%;
+    border: 5px solid white;
+    height: 30px;
+    width: 30px;
+    z-index: 20;
+    position: relative;
+}
+
+.mole.mouth {
+    background-color: black;
+    border: none;
+    border-bottom: 10px solid white;
+    height: 30px;
+    width: 50px;
+    border-radius: 100%;
+    z-index: 20;
+    position: relative;
+    top: -15%;
+    margin: auto;
+}
+
+.mole.bottom {
+    background-color: black;
+    height: 20%;
+    width: 100px;
+    border-radius: 100%;
+    border: 2px solid white;
+    z-index: 1;
+    position: relative;
+    top: -25%;
+}
+
+.test {
+    display: flex;
+    justify-content: space-around;
+    overflow: hidden;
+    height: 200px;
+}
+
+.molly {
+    transition: ease-in 3s transform;
+    transform: translate(0,-100%);
+    overflow: hidden;
+    height: 200px;
+    width: auto;
+}
