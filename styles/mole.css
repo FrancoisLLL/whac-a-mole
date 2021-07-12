@@ -1,6 +1,6 @@
 :root {
-    --vertical-offset: -56%;
-    --max-width: 150px;
+    --vertical-offset: -75%;
+    --max-width: 110px;
 
   }
 
@@ -16,20 +16,19 @@
 
 
 .mole.lid.top, .mole.lid.bottom {
-    height: 20%;
+    height: 30%;
     z-index: 29;
     border-radius: 100%;
 }
 
 .mole.lid.top {
-    top: calc(var(--vertical-offset) + 130%);
+    top: calc(var(--vertical-offset) + 140%);
 }
 
 .mole.lid.body {
     height: 5%;
     z-index: 28;
-    top: calc(var(--vertical-offset) + 120%);
-
+    top: calc(var(--vertical-offset) + 125%);
     border-bottom: 0px;
 }
 
@@ -43,7 +42,7 @@
     width: 70%;
     max-width: var(--max-width);
 
-    height: 40%;
+    height: 50%;
     position: relative;
     top: calc(var(--vertical-offset) + 100%);
     border-bottom: 0px;
@@ -78,7 +77,7 @@
 
 .mole.bottom {
     background-color: black;
-    height: 20%;
+    height: 30%;
     width: 70%;
     max-width: var(--max-width);
 
@@ -108,7 +107,7 @@
 
 .getOut {
     transition: ease-in 0.6s transform;
-    transform: translate(0,-40%); 
+    transform: translate(0,-60%); 
 }
 
 .getIn {
