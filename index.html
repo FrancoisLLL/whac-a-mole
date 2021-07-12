@@ -22,14 +22,16 @@
 
 <body>
     <header id="header"> 
-        <h1>Whac-A-Mole</h1>
-        <p id="score"> Score : </p>
-        <p id="playtime">Playing since : </p>
-        <!-- <p id="speed">Current speed : </p> -->
-        <p id="level">Level : </p>
+        <h1>Whac A Mole !</h1>
+        <div>
+            <p class = "p" id="score"> Score : 0 points</p>
+            <p class = "p"id="playtime">Playtime : 0 sec</p>
+            <!-- <p id="speed">Current speed : </p> -->
+            <p class = "p"id="level">Level : 1</p>
+        </div>
     </header>
 
-    <div id=grid>
+    <div id=grid class="gradient-border">
         <div class="hole">
             <div class="moleContainer">
                 <div class="mole lid top"></div>
@@ -148,11 +150,13 @@
             </div>
         </div>
     </div>
-
+    <button id="restart">
+        Restart
+    </button>
     <div id="myModal" class="modal">
 
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="modal-content gradient-border">
           <span class="close">&times;</span>
           <p>Some text in the Modal..</p>
         </div>
