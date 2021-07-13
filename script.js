@@ -18,9 +18,15 @@ const classicButton = document.getElementById("classic");
 const hardcoreButton = document.getElementById("hardcore");
 const backButton = document.getElementById("back");
 
+//Modal
+const modal = document.getElementById("modal");
+const span = document.getElementsByClassName("close")[0];
+
+//Francois : better to create Object ?
 let numberOfClicksBeforeLevelUp = 10;
 let winningScore = 5000;
 let startTime = new Date();
+let playtime = 0;
 let generationPeriod = 1000;
 let coeff = 1.10;
 let counter = 0;
@@ -32,6 +38,7 @@ let mode = "Easy";
 
 let intervalId = 0;
 
+
 // Audio
 const music = document.getElementById("background-music");
 const hit = document.getElementById("hit");
@@ -41,10 +48,6 @@ music.volume = 0.1;
 hit.volume = 0.1;
 miss.volume = 0.1;
 
-//modal you lose
-var modal = document.getElementById("myModal");
-var span = document.getElementsByClassName("close")[0];
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Add event listeners 
@@ -52,7 +55,6 @@ moles.forEach((item) => item.addEventListener('click', killMole));
 
 restartButton.onclick = function () {
     initGame();
-    clearInterval(intervalId);
     startGame();
 };
 
@@ -60,7 +62,6 @@ backButton.onclick = function () {
     sectionHome.classList.remove("hidden");
     sectionMain.classList.add("hidden");
     initGame();
-    clearInterval(intervalId);
 };
 
 easyButton.onclick = function () {
@@ -70,7 +71,7 @@ easyButton.onclick = function () {
     startGame();
 
     winningScore = 1000;
-    mode= "Easy";
+    mode= "easy";
     updateMode();
     updateHighscore();
 };
@@ -142,7 +143,10 @@ function updateHighscore() {
 }
 
 function updateTime() {
-    playtimeElement.innerHTML = 'Playtime: ' + Math.floor((new Date() - startTime) / 1000) + "s";
+    playtime = Math.floor((new Date() - startTime) / 1000);
+
+    playtimeElement.innerHTML = 'Playtime: ' + playtime  + "s";
+    //Math.floor((new Date() - startTime) / 1000)
 }
 
 function randomHoleSelector() {
@@ -158,6 +162,7 @@ function startGame() {
 
     intervalId = setInterval(() => {
         updateTime();
+        playtime = Math.floor((new Date() - startTime) / 1000);
         let randomMole = randomHoleSelector();
 
         if (checkGameStatus()) {
@@ -185,24 +190,24 @@ function startGame() {
 
 function checkGameStatus() {
     const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
+    updateHighscore();
+
     if (holesLeft.length < 2) {
-        updateHighscore();
         gameOn = false;
         music.pause();
         clearInterval(intervalId);
         if (isHighscore()) {
-            displayModalHiscore();
+            setTimeout(displayModalHiscore, 1000)
         } else {
-            displayModalYouLose();
+            setTimeout(displayModalYouLose, 1000)
         }
         return true;
 
     } else if (score > winningScore) {
-        updateHighscore() ;
         gameOn = false;
         music.pause();
         isHighscore(score);
-        displayModalYouWin();
+        setTimeout(displayModalYouWin, 1000)
         clearInterval(intervalId);
         return true;
     }
@@ -215,6 +220,7 @@ function initGame() {
     score = 0;
     level = 1;
     gameOn = true;
+    clearInterval(intervalId);
 
     moles.forEach((child) => child.classList.remove("active"));
     moles.forEach((child) => child.classList.add("getIn"));
@@ -249,7 +255,7 @@ function displayModalHiscore() {
     modal.style.display = "block";
     modal.querySelector("p").innerText = `Highscore !!!
     Score : ${score} pts
-    Playtime : ${Math.floor( (new Date() - startTime) /1000 )}s`;
+    Playtime : ${playtime}s`;
 }
 
 // YOU LOSE MODAL
@@ -257,8 +263,9 @@ function displayModalYouLose() {
     modal.style.display = "block";
     modal.querySelector("p").innerText = `You lose !
     Score : ${score} pts
-    Playtime : ${Math.floor( (new Date() - startTime) /1000 )}s`;
+    Playtime : ${playtime}s`;
 }
+
 span.onclick = function () {
     modal.style.display = "none";
 }
