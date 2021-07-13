@@ -3,7 +3,7 @@
 
 @font-face {
     font-family: "pac-font";
-    src: url("/resource/crackman.TTF");
+    src: url("./resource/crackman.TTF");
 }
 
 * {
