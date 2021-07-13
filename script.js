@@ -1,21 +1,36 @@
 //Const and global var 
+
 const grid = document.getElementById("grid");
 const moles = document.querySelectorAll(".moleContainer");
+//Infos
 const scoreElement = document.getElementById("score");
-const speedElement = document.getElementById("speed");
+const modeElement = document.getElementById("mode");
+const highscoreElement = document.getElementById("highscore");
 const playtimeElement = document.getElementById("playtime");
-const levelElement = document.getElementById("level");
-const numberOfClicksBeforeLevelUp = 10;
-const restartButton = document.getElementById("restart");
-let startTime = new Date();
 
+const sectionMain = document.getElementById("main");
+const sectionHome = document.getElementById("home");
+
+//Buttons
+const restartButton = document.getElementById("restart");
+const easyButton = document.getElementById("easy");
+const classicButton = document.getElementById("classic");
+const hardcoreButton = document.getElementById("hardcore");
+const backButton = document.getElementById("back");
+
+let numberOfClicksBeforeLevelUp = 10;
+let winningScore = 5000;
+let startTime = new Date();
 let generationPeriod = 1000;
-const coeff = 1.10;
+let coeff = 1.10;
 let counter = 0;
 let score = 0;
 let level = 1;
 let gameOn = true;
-let highscore = 0;
+let highscore = 2000;
+let mode = "Easy";
+
+let intervalId = 0;
 
 // Audio
 const music = document.getElementById("background-music");
@@ -32,8 +47,59 @@ var span = document.getElementsByClassName("close")[0];
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Add event listeners on HTML moles element
+//Add event listeners 
 moles.forEach((item) => item.addEventListener('click', killMole));
+
+restartButton.onclick = function () {
+    initGame();
+    clearInterval(intervalId);
+    startGame();
+};
+
+backButton.onclick = function () {
+    sectionHome.classList.remove("hidden");
+    sectionMain.classList.add("hidden");
+    initGame();
+    clearInterval(intervalId);
+};
+
+easyButton.onclick = function () {
+    sectionHome.classList.add("hidden");
+    sectionMain.classList.remove("hidden");
+    initGame();
+    startGame();
+
+    winningScore = 1000;
+    mode= "Easy";
+    updateMode();
+    updateHighscore();
+};
+
+classicButton.onclick = function () {
+    sectionHome.classList.add("hidden");
+    sectionMain.classList.remove("hidden");
+    initGame();
+    startGame();
+
+    coeff = 1.15;
+    winningScore = 5000;
+    mode="classic";
+    updateMode();
+    updateHighscore();
+};
+
+hardcoreButton.onclick = function () {
+    sectionHome.classList.add("hidden");
+    sectionMain.classList.remove("hidden");
+    initGame();
+    startGame();
+    coeff = 1.2;
+    winningScore = 9999999999999;
+    mode="hardcore";
+    updateMode();
+};
+
+
 
 //Add event listener on button
 
@@ -46,10 +112,13 @@ function killMole(event) {
         mole.classList.add("getIn");
         mole.classList.remove("getOut");
         updateScore();
-        updateLevel();
+        // updateLevel();
         hit.play();
         counter++;
     }
+    if (checkGameStatus()) {
+        clearInterval(intervalId);
+    };
     miss.play();
 }
 
@@ -61,19 +130,19 @@ function increaseScore(mole) {
 }
 
 function updateScore() {
-    scoreElement.innerHTML = 'Score : ' + score + " points";
+    scoreElement.innerHTML = 'Score: ' + score + "pts";
 }
 
-function updateLevel() {
-    levelElement.innerHTML = 'Level : ' + level;
+function updateMode() {
+    modeElement.innerHTML = 'Mode: ' + mode;
 }
 
-function updateSpeed() {
-    speedElement.innerHTML = 'Speed : ' + Math.floor(1000000 / (generationPeriod));
+function updateHighscore() {
+    highscoreElement.innerHTML = 'Highscore: ' + highscore + "pts";
 }
 
 function updateTime() {
-    playtimeElement.innerHTML = 'Playtime : ' + Math.floor((new Date() - startTime) / 1000) + " sec";
+    playtimeElement.innerHTML = 'Playtime: ' + Math.floor((new Date() - startTime) / 1000) + "s";
 }
 
 function randomHoleSelector() {
@@ -87,11 +156,11 @@ function randomHoleSelector() {
 
 function startGame() {
 
-    let intervalId = setInterval(() => {
+    intervalId = setInterval(() => {
         updateTime();
         let randomMole = randomHoleSelector();
 
-        if (checkGameOver()) {
+        if (checkGameStatus()) {
             clearInterval(intervalId);
         };
 
@@ -110,25 +179,34 @@ function startGame() {
             startGame(generationPeriod);
         }
     }, generationPeriod)
+
+    return intervalId;
 }
 
-function checkGameOver() {
+function checkGameStatus() {
     const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
     if (holesLeft.length < 2) {
+        updateHighscore();
         gameOn = false;
         music.pause();
-        saveHighscore(score);
-        displayModalYouLose();
+        clearInterval(intervalId);
+        if (isHighscore()) {
+            displayModalHiscore();
+        } else {
+            displayModalYouLose();
+        }
+        return true;
+
+    } else if (score > winningScore) {
+        updateHighscore() ;
+        gameOn = false;
+        music.pause();
+        isHighscore(score);
+        displayModalYouWin();
+        clearInterval(intervalId);
         return true;
     }
 }
-
-initGame();
-startGame();
-restartButton.onclick = function () {
-    initGame();
-    startGame();
-};
 
 function initGame() {
     startTime = new Date();
@@ -138,43 +216,52 @@ function initGame() {
     level = 1;
     gameOn = true;
 
-    console.log(moles);
-
-    // mole.classList.remove("active");
-    // mole.classList.add("getIn");
-    // mole.classList.remove("getOut");
-
     moles.forEach((child) => child.classList.remove("active"));
     moles.forEach((child) => child.classList.add("getIn"));
     moles.forEach((child) => child.classList.remove("getOut"));
+
     updateScore();
-    updateLevel();
+    // updateLevel();
     updateTime();
+
     music.play();
 }
 
-function displayModalYouLose() {
-    modal.style.display = "block";
-    modal.querySelector("p").innerText = `You lost !
-    Score : ${score} points
-    Playtime : ${Math.floor( (new Date() - startTime) /1000 )}s
-    Level : ${level}
-    
-    Highscore : ${highscore} points`;
+function isHighscore() {
+    if (score > highscore) {
+        saveHighscore();
+        return true;
+    }
 }
 
 function saveHighscore() {
-    if(score > highscore) {
-        highscore = score;
-        console.log(highscore);
-    }
+    highscore = score;
 }
-// When the user clicks on <span> (x), close the modal
+//YOU WIN
+function displayModalYouWin() {
+    modal.style.display = "block";
+    modal.querySelector("p").innerText = `You Win !!!
+    
+    Try a harder mode =D`;
+}
+//Highscore !
+function displayModalHiscore() {
+    modal.style.display = "block";
+    modal.querySelector("p").innerText = `Highscore !!!
+    Score : ${score} pts
+    Playtime : ${Math.floor( (new Date() - startTime) /1000 )}s`;
+}
+
+// YOU LOSE MODAL
+function displayModalYouLose() {
+    modal.style.display = "block";
+    modal.querySelector("p").innerText = `You lose !
+    Score : ${score} pts
+    Playtime : ${Math.floor( (new Date() - startTime) /1000 )}s`;
+}
 span.onclick = function () {
     modal.style.display = "none";
 }
-
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";

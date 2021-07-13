@@ -21,148 +21,188 @@
 </head>
 
 <body>
-    <header id="header"> 
-        <h1>Whac A Mole !</h1>
+    <section id="home">
+        <h1>
+            Whac a mole !
+        </h1>
+        <h3>
+            Select game mode :
+        </h3>
         <div>
-            <p class = "p" id="score"> Score : 0 points</p>
-            <p class = "p"id="playtime">Playtime : 0 sec</p>
-            <!-- <p id="speed">Current speed : </p> -->
-            <p class = "p"id="level">Level : 1</p>
+            <button id="easy" class="homeButton gradient-border">
+                Easy
+            </button>
+            <button id="classic" class="homeButton gradient-border">
+                Classic
+            </button>
+            <button id="hardcore" class="homeButton gradient-border">
+                Hardcore
+            </button>
         </div>
-    </header>
 
-    <div id=grid class="gradient-border">
-        <div class="hole">
-            <div class="moleContainer">
-                <div class="mole lid top"></div>
-                <div class="mole lid body"></div>
-                <div class="mole lid bottom"></div>
-                <div class="mole face">
-                    <div class="mole eye"></div>
-                    <div class="mole eye"></div>
-                </div>
-                <div class="mole mouth"></div>
-                <div class="mole bottom"></div>
-            </div>
+        <div class="footer">
+            By François LY
         </div>
-        <div class="hole">
-            <div class="moleContainer">
-                <div class="mole lid top"></div>
-                <div class="mole lid body"></div>
-                <div class="mole lid bottom"></div>
-                <div class="mole face">
-                    <div class="mole eye"></div>
-                    <div class="mole eye"></div>
-                </div>
-                <div class="mole mouth"></div>
-                <div class="mole bottom"></div>
-            </div>
-        </div>
-        <div class="hole">
-            <div class="moleContainer">
-                <div class="mole lid top"></div>
-                <div class="mole lid body"></div>
-                <div class="mole lid bottom"></div>
-                <div class="mole face">
-                    <div class="mole eye"></div>
-                    <div class="mole eye"></div>
-                </div>
-                <div class="mole mouth"></div>
-                <div class="mole bottom"></div>
-            </div>
-        </div>
-        <div class="hole">
-            <div class="moleContainer">
-                <div class="mole lid top"></div>
-                <div class="mole lid body"></div>
-                <div class="mole lid bottom"></div>
-                <div class="mole face">
-                    <div class="mole eye"></div>
-                    <div class="mole eye"></div>
-                </div>
-                <div class="mole mouth"></div>
-                <div class="mole bottom"></div>
-            </div>
-        </div>
-        <div class="hole">
-            <div class="moleContainer">
-                <div class="mole lid top"></div>
-                <div class="mole lid body"></div>
-                <div class="mole lid bottom"></div>
-                <div class="mole face">
-                    <div class="mole eye"></div>
-                    <div class="mole eye"></div>
-                </div>
-                <div class="mole mouth"></div>
-                <div class="mole bottom"></div>
-            </div>
-        </div>
-        <div class="hole">
-            <div class="moleContainer">
-                <div class="mole lid top"></div>
-                <div class="mole lid body"></div>
-                <div class="mole lid bottom"></div>
-                <div class="mole face">
-                    <div class="mole eye"></div>
-                    <div class="mole eye"></div>
-                </div>
-                <div class="mole mouth"></div>
-                <div class="mole bottom"></div>
-            </div>
-        </div>
-        <div class="hole">
-            <div class="moleContainer">
-                <div class="mole lid top"></div>
-                <div class="mole lid body"></div>
-                <div class="mole lid bottom"></div>
-                <div class="mole face">
-                    <div class="mole eye"></div>
-                    <div class="mole eye"></div>
-                </div>
-                <div class="mole mouth"></div>
-                <div class="mole bottom"></div>
-            </div>
-        </div>
-        <div class="hole">
-            <div class="moleContainer">
-                <div class="mole lid top"></div>
-                <div class="mole lid body"></div>
-                <div class="mole lid bottom"></div>
-                <div class="mole face">
-                    <div class="mole eye"></div>
-                    <div class="mole eye"></div>
-                </div>
-                <div class="mole mouth"></div>
-                <div class="mole bottom"></div>
-            </div>
-        </div>
-        <div class="hole">
-            <div class="moleContainer">
-                <div class="mole lid top"></div>
-                <div class="mole lid body"></div>
-                <div class="mole lid bottom"></div>
-                <div class="mole face">
-                    <div class="mole eye"></div>
-                    <div class="mole eye"></div>
-                </div>
-                <div class="mole mouth"></div>
-                <div class="mole bottom"></div>
-            </div>
-        </div>
-    </div>
-    <button id="restart">
-        Restart
-    </button>
-    <div id="myModal" class="modal">
 
-        <!-- Modal content -->
-        <div class="modal-content gradient-border">
-          <span class="close">&times;</span>
-          <p>Some text in the Modal..</p>
+    </section>
+    <section id="main" class="hidden">
+        <header id="header">
+            <h2>Whac A Mole !</h2>
+            <div class="info">
+                <p class="p" id="score"> Score: 0pts</p>
+                <p class="p" id="playtime">Playtime: 0s</p>
+            </div>
+            
+        </header>
+        <div id=grid class="gradient-border">
+            <div class="hole">
+                <div class="moleContainer">
+                    <div class="mole lid top"></div>
+                    <div class="mole lid body"></div>
+                    <div class="mole lid bottom"></div>
+                    <div class="mole face">
+                        <div class="mole eye"></div>
+                        <div class="mole eye"></div>
+                    </div>
+                    <div class="mole mouth"></div>
+                    <div class="mole bottom"></div>
+                </div>
+            </div>
+            <div class="hole">
+                <div class="moleContainer">
+                    <div class="mole lid top"></div>
+                    <div class="mole lid body"></div>
+                    <div class="mole lid bottom"></div>
+                    <div class="mole face">
+                        <div class="mole eye"></div>
+                        <div class="mole eye"></div>
+                    </div>
+                    <div class="mole mouth"></div>
+                    <div class="mole bottom"></div>
+                </div>
+            </div>
+            <div class="hole">
+                <div class="moleContainer">
+                    <div class="mole lid top"></div>
+                    <div class="mole lid body"></div>
+                    <div class="mole lid bottom"></div>
+                    <div class="mole face">
+                        <div class="mole eye"></div>
+                        <div class="mole eye"></div>
+                    </div>
+                    <div class="mole mouth"></div>
+                    <div class="mole bottom"></div>
+                </div>
+            </div>
+            <div class="hole">
+                <div class="moleContainer">
+                    <div class="mole lid top"></div>
+                    <div class="mole lid body"></div>
+                    <div class="mole lid bottom"></div>
+                    <div class="mole face">
+                        <div class="mole eye"></div>
+                        <div class="mole eye"></div>
+                    </div>
+                    <div class="mole mouth"></div>
+                    <div class="mole bottom"></div>
+                </div>
+            </div>
+            <div class="hole">
+                <div class="moleContainer">
+                    <div class="mole lid top"></div>
+                    <div class="mole lid body"></div>
+                    <div class="mole lid bottom"></div>
+                    <div class="mole face">
+                        <div class="mole eye"></div>
+                        <div class="mole eye"></div>
+                    </div>
+                    <div class="mole mouth"></div>
+                    <div class="mole bottom"></div>
+                </div>
+            </div>
+            <div class="hole">
+                <div class="moleContainer">
+                    <div class="mole lid top"></div>
+                    <div class="mole lid body"></div>
+                    <div class="mole lid bottom"></div>
+                    <div class="mole face">
+                        <div class="mole eye"></div>
+                        <div class="mole eye"></div>
+                    </div>
+                    <div class="mole mouth"></div>
+                    <div class="mole bottom"></div>
+                </div>
+            </div>
+            <div class="hole">
+                <div class="moleContainer">
+                    <div class="mole lid top"></div>
+                    <div class="mole lid body"></div>
+                    <div class="mole lid bottom"></div>
+                    <div class="mole face">
+                        <div class="mole eye"></div>
+                        <div class="mole eye"></div>
+                    </div>
+                    <div class="mole mouth"></div>
+                    <div class="mole bottom"></div>
+                </div>
+            </div>
+            <div class="hole">
+                <div class="moleContainer">
+                    <div class="mole lid top"></div>
+                    <div class="mole lid body"></div>
+                    <div class="mole lid bottom"></div>
+                    <div class="mole face">
+                        <div class="mole eye"></div>
+                        <div class="mole eye"></div>
+                    </div>
+                    <div class="mole mouth"></div>
+                    <div class="mole bottom"></div>
+                </div>
+            </div>
+            <div class="hole">
+                <div class="moleContainer">
+                    <div class="mole lid top"></div>
+                    <div class="mole lid body"></div>
+                    <div class="mole lid bottom"></div>
+                    <div class="mole face">
+                        <div class="mole eye"></div>
+                        <div class="mole eye"></div>
+                    </div>
+                    <div class="mole mouth"></div>
+                    <div class="mole bottom"></div>
+                </div>
+            </div>
         </div>
-      
-      </div>
 
+        <div class="info">
+            <p class="p" id="highscore"> Highscore : 0 points</p>
+            <p class="p" id="mode">Mode : Easy</p>
+        </div>
+
+        <div id="control-main">
+            <button id="back" class="button-main">
+                Homescreen
+            </button>
+            <button id="restart" class="button-main">
+                Restart
+            </button>
+            <button id="highscore" class="button-main">
+                Highscore
+            </button>
+        </div>
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content gradient-border">
+                <span class="close">&times;</span>
+                <p>Some text in the Modal..</p>
+            </div>
+
+        </div>
+
+
+
+    </section>
 </body>
 
 </html>
