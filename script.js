@@ -1,15 +1,18 @@
-//Const and global var 
+///////////////////////////////////////////////////////////Const and global var 
 
-const grid = document.getElementById("grid");
-const moles = document.querySelectorAll(".moleContainer");
+// Screens
+const sectionMain = document.getElementById("main");
+const sectionHome = document.getElementById("home");
+
 //Infos
 const scoreElement = document.getElementById("score");
 const modeElement = document.getElementById("mode");
 const highscoreElement = document.getElementById("highscore");
 const playtimeElement = document.getElementById("playtime");
 
-const sectionMain = document.getElementById("main");
-const sectionHome = document.getElementById("home");
+//Grid and moles
+const grid = document.getElementById("grid");
+const moles = document.querySelectorAll(".moleContainer");
 
 //Buttons
 const restartButton = document.getElementById("restart");
@@ -22,112 +25,169 @@ const backButton = document.getElementById("back");
 const modal = document.getElementById("modal");
 const span = document.getElementsByClassName("close")[0];
 
-//Francois : better to create Object ?
+//Cursor
+const cursor = document.getElementById("cursor");
+
+//Audio
+const music = document.getElementById("background-music");
+const hit = document.getElementById("hit");
+const miss = document.getElementById("miss");
+const win = document.getElementById("win");
+const gameover = document.getElementById("gameover");
+const button = document.getElementById("button");
+
+const gameCoeff = {
+    easy: 1.1,
+    classic: 1.15,
+    hardcore: 1.3
+}
+
+const gameWinningPointsToReach = {
+    easy: 3000,
+    classic: Number.MAX_VALUE,
+    hardcore: Number.MAX_VALUE
+}
+
+//Francois : better to create Object Game ?
 let numberOfClicksBeforeLevelUp = 10;
-let winningScore = 5000;
+let winningScore = 1000;
 let startTime = new Date();
 let playtime = 0;
 let generationPeriod = 1000;
 let coeff = 1.10;
-let counter = 0;
+let molesClickCounter = 0;
 let score = 0;
 let level = 1;
-let gameOn = true;
+let gameOn = false;
 let highscore = 2000;
-let mode = "Easy";
+let mode = "easy";
 
 let intervalId = 0;
-
-
-// Audio
-const music = document.getElementById("background-music");
-const hit = document.getElementById("hit");
-const miss = document.getElementById("miss");
-
+let timeIntervalId = 0;
+// Music setup
 music.volume = 0.1;
 hit.volume = 0.1;
 miss.volume = 0.1;
+button.volume = 0.1;
+win.volume = 0.15;
+gameover.volume = 0.15;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-//Add event listeners 
+//////////////////////////////////////////////////////////Event listeners
 moles.forEach((item) => item.addEventListener('click', killMole));
 
 restartButton.onclick = function () {
-    initGame();
     startGame();
+    button.play();
 };
 
 backButton.onclick = function () {
-    sectionHome.classList.remove("hidden");
-    sectionMain.classList.add("hidden");
-    initGame();
+    hideMainGame();
+    stopGame();
+    button.play();
 };
 
 easyButton.onclick = function () {
-    sectionHome.classList.add("hidden");
-    sectionMain.classList.remove("hidden");
-    initGame();
+    hideHome();
+    coeff = gameCoeff.easy;
+    winningScore = gameWinningPointsToReach.easy;
+    mode = "easy";
     startGame();
-
-    winningScore = 1000;
-    mode= "easy";
-    updateMode();
-    updateHighscore();
+    button.play();
 };
 
 classicButton.onclick = function () {
-    sectionHome.classList.add("hidden");
-    sectionMain.classList.remove("hidden");
-    initGame();
+    hideHome();
+    coeff = gameCoeff.classic;
+    winningScore = gameWinningPointsToReach.classic;
+    mode = "classic";
     startGame();
-
-    coeff = 1.15;
-    winningScore = 5000;
-    mode="classic";
-    updateMode();
-    updateHighscore();
+    button.play();
 };
 
 hardcoreButton.onclick = function () {
-    sectionHome.classList.add("hidden");
-    sectionMain.classList.remove("hidden");
-    initGame();
+    hideHome();
+    coeff = gameCoeff.hardcore;
+    winningScore = gameWinningPointsToReach.hardcore;
+    mode = "hardcore";
     startGame();
-    coeff = 1.2;
-    winningScore = 9999999999999;
-    mode="hardcore";
-    updateMode();
+    button.play();
 };
 
+//////////////////////////////////////////////Functions
+
+function hideHome() {
+    sectionHome.classList.add("hidden");
+    sectionMain.classList.remove("hidden");
+}
+
+function hideMainGame() {
+    sectionHome.classList.remove("hidden");
+    sectionMain.classList.add("hidden");
+}
+
+function initMolesClasses() {
+    moles.forEach((child) => child.classList.remove("getInSlow"));
+    moles.forEach((child) => child.classList.remove("active"));
+    moles.forEach((child) => child.classList.remove("getOut"));
+    moles.forEach((child) => child.classList.remove("getIn"));
+
+}
 
 
-//Add event listener on button
+function moleGetInSlow() {
+    moles.forEach((child) => child.classList.add("getInSlow"));
+    moles.forEach((child) => child.classList.remove("active"));
+    moles.forEach((child) => child.classList.remove("getOut"));
+}
+
+function moleGetOut(mole) {
+    mole.classList.add("active");
+    mole.classList.add("getOut");
+    mole.classList.remove("getIn");
+    mole.querySelectorAll(".eye").forEach((item) => item.classList.remove("scaredEye"));
+    // mole.querySelectorAll(".mouth").forEach((item) => item.classList.remove("scaredMouth"));
+
+
+}
+
+function moleGetIn(mole) {
+    mole.classList.remove("active");
+    mole.classList.add("getIn");
+    mole.classList.remove("getOut");
+    mole.querySelectorAll(".eye").forEach((item) => item.classList.add("scaredEye"));
+    // mole.querySelectorAll(".mouth").forEach((item) => item.classList.add("scaredMouth"));
+
+}
+
 
 function killMole(event) {
     let mole = event.currentTarget;
 
     if (gameOn === true && mole.classList.contains("active")) {
-        increaseScore(mole);
-        mole.classList.remove("active");
-        mole.classList.add("getIn");
-        mole.classList.remove("getOut");
-        updateScore();
-        // updateLevel();
+        increaseScore();
+        moleGetIn(mole);
+        updateInfo();
         hit.play();
-        counter++;
+        molesClickCounter++;
     }
-    if (checkGameStatus()) {
+    if (checkGameEnd()) {
         clearInterval(intervalId);
+        clearInterval(timeIntervalId);
     };
     miss.play();
 }
 
-function increaseScore(mole) {
-    if (mole.classList.contains("active")) {
-        score += Math.floor(10000000 / (generationPeriod * generationPeriod));
-    }
+function increaseScore() {
+    let divider = generationPeriod / 10000;
+    score += Math.floor(1/ (divider ** 2));
     return score;
+}
+
+function updateInfo() {
+    updateScore();
+    updateMode();
+    updateTime();
+    updateHighscore();
 }
 
 function updateScore() {
@@ -143,10 +203,14 @@ function updateHighscore() {
 }
 
 function updateTime() {
-    playtime = Math.floor((new Date() - startTime) / 1000);
+    playtimeElement.innerHTML = 'Playtime: ' + playtime + "s";
+}
 
-    playtimeElement.innerHTML = 'Playtime: ' + playtime  + "s";
-    //Math.floor((new Date() - startTime) / 1000)
+function countPlaytime() {
+     timeIntervalId = setInterval( () => {
+        playtime = Math.floor((new Date() - startTime) / 1000);
+        updateTime();
+    }, 500)
 }
 
 function randomHoleSelector() {
@@ -159,77 +223,88 @@ function randomHoleSelector() {
 }
 
 function startGame() {
+    initGame();
+    runGame();
+}
 
+function runGame() {
     intervalId = setInterval(() => {
-        updateTime();
-        playtime = Math.floor((new Date() - startTime) / 1000);
         let randomMole = randomHoleSelector();
 
-        if (checkGameStatus()) {
-            clearInterval(intervalId);
-        };
-
         if (randomMole !== undefined) {
-            randomMole.classList.add("active");
-            randomMole.classList.add("getOut");
-            randomMole.classList.remove("getIn");
+            moleGetOut(randomMole);
         }
-
-        if (counter > numberOfClicksBeforeLevelUp) {
-            counter = 0;
+        if (molesClickCounter > numberOfClicksBeforeLevelUp) {
+            molesClickCounter = 0;
             level++;
-            generationPeriod = 10 * (Math.floor(generationPeriod / coeff / 10));
+            generationPeriod = generationPeriod / coeff ;
             clearInterval(intervalId);
             console.log("generationPeriod in interval function", generationPeriod);
-            startGame(generationPeriod);
+            runGame(generationPeriod);
         }
+
+        checkGameEnd();
+
     }, generationPeriod)
 
     return intervalId;
 }
 
-function checkGameStatus() {
+function checkGameEnd() {
     const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
-    updateHighscore();
 
-    if (holesLeft.length < 2) {
-        gameOn = false;
-        music.pause();
-        clearInterval(intervalId);
-        if (isHighscore()) {
-            setTimeout(displayModalHiscore, 1000)
-        } else {
-            setTimeout(displayModalYouLose, 1000)
+    if ((holesLeft.length === 0 || score >= winningScore)) {
+        stopGame();
+        return true;
+    }
+}
+
+function stopGame() {
+    const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
+    music.pause();
+
+    displayEndgameModal(holesLeft);
+
+    //Push mole transition back to position
+    setTimeout(moleGetInSlow,500);
+
+    clearInterval(intervalId);
+    clearInterval(timeIntervalId);
+    updateInfo();
+    gameOn = false;
+}
+
+function displayEndgameModal(holesLeft) {
+    if (gameOn ===true) {
+        if (holesLeft.length ===0) {
+            if (isHighscore()) {
+                win.play();
+                displayModalHiscore();
+            } else {
+                displayModalYouLose();
+                gameover.play();
+            }
+        } else if (score >= winningScore) {
+            win.play();
+            isHighscore(score);
+            displayModalYouWin();
         }
-        return true;
-
-    } else if (score > winningScore) {
-        gameOn = false;
-        music.pause();
-        isHighscore(score);
-        setTimeout(displayModalYouWin, 1000)
-        clearInterval(intervalId);
-        return true;
     }
 }
 
 function initGame() {
     startTime = new Date();
     generationPeriod = 1000;
-    counter = 0;
+    molesClickCounter = 0;
+    playtime = 0;
     score = 0;
     level = 1;
     gameOn = true;
     clearInterval(intervalId);
-
-    moles.forEach((child) => child.classList.remove("active"));
-    moles.forEach((child) => child.classList.add("getIn"));
-    moles.forEach((child) => child.classList.remove("getOut"));
-
-    updateScore();
-    // updateLevel();
-    updateTime();
-
+    clearInterval(timeIntervalId);
+    countPlaytime();
+    initMolesClasses();
+    updateInfo();
     music.play();
 }
 
@@ -243,6 +318,7 @@ function isHighscore() {
 function saveHighscore() {
     highscore = score;
 }
+
 //YOU WIN
 function displayModalYouWin() {
     modal.style.display = "block";
@@ -269,8 +345,20 @@ function displayModalYouLose() {
 span.onclick = function () {
     modal.style.display = "none";
 }
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
+
+window.onmousemove = function(e){
+    // console.log("move", e.clientX, e.clientY);
+    cursor.style.left = e.clientX - 15 + 'px';
+    cursor.style.top = e.clientY - 45 + 'px';
 }
+
+window.onclick = function(e){
+    // console.log("move", e.clientX, e.clientY);
+    cursor.classList.add("hammer-rotate")
+    setTimeout( () => cursor.classList.remove("hammer-rotate"), 200)
+}
+// window.onclick = function (event) {
+//     if (event.target == modal) {
+//         modal.style.display = "none";
+//     }
+// }

@@ -1,8 +1,9 @@
 :root {
     --vertical-offset: -75%;
     --max-width: 100px;
-  }
+}
 
+/* lid */
 .mole.lid {
     border: 2px solid white;
 
@@ -14,7 +15,8 @@
 }
 
 
-.mole.lid.top, .mole.lid.bottom {
+.mole.lid.top,
+.mole.lid.bottom {
     height: 30%;
     z-index: 29;
     border-radius: 100%;
@@ -24,6 +26,7 @@
     top: calc(var(--vertical-offset) + 140%);
 }
 
+/* body */
 .mole.lid.body {
     height: 5%;
     z-index: 28;
@@ -50,12 +53,12 @@
     justify-content: space-around;
 }
 
-.mole.face .eye{  
+.mole.face .eye {
     border-radius: 50%;
     border: 5px solid white;
     height: 30px;
     width: 30px;
-    
+
     z-index: 20;
     position: relative;
 }
@@ -87,43 +90,161 @@
     top: calc(var(--vertical-offset) + 75%);
 }
 
-/* .test {
-    background-color: black;
-    height: 20%;
-    width: 100px;
-    border-radius: 100%;
-    border: 2px solid white;
-    z-index: -1;
-    position: relative;
-    top: 55%;
-    transition:none;
-} */
-
-
 .moleContainer {
     height: 100%;
 }
 
+/* Transitions */
 .getOut {
     transition: ease-in 0.6s transform;
-    transform: translate(0,-60%); 
+    transform: translate(0, -60%);
 }
 
 .getIn {
-    transition: ease-in 0.2s transform;
-    transform: translate(0,0%); 
+    transition: ease-in 0.4s transform;
+    transform: translate(0, 0%);
+}
+
+.getInSlow {
+    transition: ease-in 2s transform;
+    transform: translate(0, 0%);
+}
+
+/* .hole:hover {
+    animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both infinite;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+} */
+
+.hole:hover {
+    animation: wobble-hor-bottom 0.8s both;
+    /* transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px; */
+}
+.wobble-hor-bottom {
+	-webkit-animation: wobble-hor-bottom 0.8s both;
+	        animation: wobble-hor-bottom 0.8s both;
+}
+
+  @keyframes wobble-hor-bottom {
+    0%,
+    100% {
+      -webkit-transform: translateX(0%);
+              transform: translateX(0%);
+      -webkit-transform-origin: 50% 50%;
+              transform-origin: 50% 50%;
+    }
+    15% {
+      -webkit-transform: translateX(-5px) rotate(-2deg);
+              transform: translateX(-5px) rotate(-2deg);
+    }
+    30% {
+      -webkit-transform: translateX(4px) rotate(2deg);
+              transform: translateX(4px) rotate(2deg);
+    }
+    45% {
+      -webkit-transform: translateX(-4px) rotate(-1deg);
+              transform: translateX(-4px) rotate(-1deg);
+    }
+    60% {
+      -webkit-transform: translateX(3px) rotate(1deg);
+              transform: translateX(3px) rotate(1deg);
+    }
+    75% {
+      -webkit-transform: translateX(-2px) rotate(-1deg);
+              transform: translateX(-2px) rotate(-1deg);
+    }
+  }
+  
+
+  
+.scaredEye {
+    animation: scared 0.4s cubic-bezier(.36, .07, .19, .97);
+}
+
+.scaredMouth {
+    animation: scared 0.4s cubic-bezier(.36, .07, .19, .97);
 }
 
 @keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
-  }
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+
+@keyframes scared {
+    0% {
+        height: 30px;
+        width: 30px;
+    }
+
+    50% {
+        height: 35px;
+        width: 35px;
+    }
+
+    100% {
+        height: 30px;
+        width: 30px;
+    }
+}
+
+@keyframes unhappyMouth {
+    0% {
+        border-bottom: 10px solid white;
+        border-top: 0px solid white;
+    }
+
+    50% {
+        border-bottom: 8px solid black;
+        border-top: 8px solid white;
+    }
+
+    100% {
+        border-bottom: 10px solid white;
+        border-top: 0px solid white;
+    }
+}
