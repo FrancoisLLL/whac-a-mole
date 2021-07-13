@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: "pac-font";
-    src: url("/resource/crackman.TTF");
+    src: url("../resource/crackman.TTF");
 }
 
 * {
@@ -37,7 +37,7 @@ h1 {
 
 h3 {
     margin-bottom: 20px;
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 .footer {
