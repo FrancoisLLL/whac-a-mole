@@ -46,7 +46,7 @@ const numberOfClicksBeforeAcceleration = 5;
 const easyInitGenerationPeriod = 600;
 const classicInitGenerationPeriod = 600;
 const survivalInitGenerationPeriod = 420;
-const classicCoeff = 1.01;
+const classicCoeff = 1.03;
 
 let startTime = new Date();
 let playtime = 0;
@@ -211,8 +211,7 @@ function initGame() {
 }
 
 function runGame() {
-    startTime = new Date();
-    startTimer();
+
 
     intervalId = setInterval(() => {
         let randomMole = randomHoleSelector();
@@ -238,7 +237,8 @@ function startGame() {
     readygo.play(); 
 
     setTimeout( () => {
-        
+        startTime = new Date();
+        startTimer();
         runGame();
     }, startDelayInMs);
     
