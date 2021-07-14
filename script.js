@@ -416,6 +416,20 @@ function displayModalYouLose() {
 
 }
 
+function displayModalReady() {
+    modal.style.display = "block";
+    if(mode!=="survival") {
+    modal.querySelector("p").innerText = `You lose !
+    Score : ${score} pts
+    Playtime : ${playtime}s`;
+    }
+    else{
+    modal.querySelector("p").innerText = `You lose !
+    level : ${level} 
+    Playtime : ${playtime}s`;
+    }
+}
+
 span.onclick = function () {
     modal.style.display = "none";
 }
