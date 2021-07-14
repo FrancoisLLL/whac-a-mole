@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: "pac-font";
-    src: url("./crackman.ttf") format('truetype');
+    src: url("./../resource/crackman.ttf") format('truetype');
 }
 
 * {

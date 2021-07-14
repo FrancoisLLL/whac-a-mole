@@ -37,6 +37,8 @@ const win = document.getElementById("win");
 const gameover = document.getElementById("gameover");
 const button = document.getElementById("button");
 const lvlsound = document.getElementById("lvlsound");
+const ready = document.getElementById("ready");
+const go = document.getElementById("go");
 
 
 //Francois : create object ?
@@ -70,6 +72,10 @@ button.volume = 0.1;
 win.volume = 0.1;
 gameover.volume = 0.15;
 lvlsound.volume = 0.1;
+ready.volume = 0.1;
+go.volume = 0.1;
+
+
 
 //////////////////////////////////////////////////////////Event listeners
 moles.forEach((item) => item.addEventListener('click', killMole));
@@ -108,18 +114,18 @@ survivalButton.onclick = function () {
 
 soundButton.onclick = function () {
     button.play();
-    if(soundButton.classList.contains("mute"))
-    {
+    if (soundButton.classList.contains("mute")) {
         music.volume = 0.05;
         hit.volume = 0.1;
         miss.volume = 0.1;
         button.volume = 0.1;
         win.volume = 0.1;
         gameover.volume = 0.15;
+        ready.volume = 0.1;
+        go.volume = 0.1;
         music.play();
         soundButton.classList.remove("mute");
-    }
-    else{
+    } else {
         music.volume = 0;
         hit.volume = 0;
         miss.volume = 0;
@@ -128,6 +134,8 @@ soundButton.onclick = function () {
         }, 100);
         win.volume = 0;
         gameover.volume = 0;
+        ready.volume = 0;
+        go.voulme = 0;
         soundButton.classList.add("mute");
     }
 };
@@ -135,20 +143,16 @@ soundButton.onclick = function () {
 //////////////////////////////////////////////Functions
 
 
-function initGameVar () {
-    if(mode ==="survival") {
+function initGameVar() {
+    if (mode === "survival") {
         generationPeriod = survivalInitGenerationPeriod;
-    }
-    else if (mode==="classic")
-    {
+    } else if (mode === "classic") {
         generationPeriod = classicInitGenerationPeriod;
         coeff = classicCoeff;
-    }
-    else {
+    } else {
         generationPeriod = easyInitGenerationPeriod
     }
-    console.log(mode);
-    console.log(generationPeriod);
+
     molesClickCounter = 0;
     playtime = 0;
     score = 0;
@@ -197,26 +201,27 @@ function moleGetIn(mole) {
 //////////////////////////////// Main functions
 
 function initGame() {
-    startTime = new Date();
-
+    
+    console.log(startTime);
     initGameVar();
-
     clearInterval(intervalId);
     clearInterval(timeIntervalId);
-    startTimer();
     initMolesClasses();
     updateInfo();
     music.play();
 }
 
 function runGame() {
+    startTime = new Date();
+    startTimer();
+
     intervalId = setInterval(() => {
         let randomMole = randomHoleSelector();
 
         if (randomMole !== undefined) {
             moleGetOut(randomMole);
         }
-        
+
         manageGameAcceleration();
 
         checkGameEnd();
@@ -227,8 +232,18 @@ function runGame() {
 }
 
 function startGame() {
+    let startDelayInMs = 3000;
+    displayModalReady(startDelayInMs);
+
     initGame();
-    runGame();
+    ready.play(); 
+
+    setTimeout( () => {
+        
+        runGame();
+        go.play();
+    }, startDelayInMs);
+    
 }
 
 
@@ -240,6 +255,7 @@ function checkGameEnd() {
         return true;
     }
 }
+
 function stopGame() {
     const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
     // music.pause();
@@ -275,10 +291,9 @@ function killMole(event) {
 }
 
 function increaseScore() {
-    if (mode !=="survival")
-    {
+    if (mode !== "survival") {
         let divider = generationPeriod / 10000;
-        score += Math.floor(1/ (divider ** 2));
+        score += Math.floor(1 / (divider ** 2));
     }
 }
 
@@ -290,10 +305,9 @@ function updateInfo() {
 }
 
 function updateScore() {
-    if(mode != "survival"){
+    if (mode != "survival") {
         scoreElement.innerHTML = 'Score: ' + score + "pts";
-    }
-    else{
+    } else {
         scoreElement.innerHTML = 'Level: ' + level;
     }
 }
@@ -303,10 +317,9 @@ function updateMode() {
 }
 
 function updateHighscore() {
-    if(mode != "survival"){
+    if (mode != "survival") {
         highscoreElement.innerHTML = 'Highscore: ' + highscore + "pts";
-    }
-    else{
+    } else {
         highscoreElement.innerHTML = 'Highest lvl: ' + highestlvl;
     }
 }
@@ -316,7 +329,7 @@ function updateTime() {
 }
 
 function startTimer() {
-     timeIntervalId = setInterval( () => {
+    timeIntervalId = setInterval(() => {
         playtime = Math.floor((new Date() - startTime) / 1000);
         updateTime();
     }, 500)
@@ -332,8 +345,8 @@ function randomHoleSelector() {
 }
 
 function displayEndgameModal(holesLeft) {
-    if (gameOn ===true) {
-        if (holesLeft.length ===0) {
+    if (gameOn === true) {
+        if (holesLeft.length === 0) {
             if (isHighscore()) {
                 win.play();
                 displayModalHiscore();
@@ -360,26 +373,26 @@ function isHighscore() {
 function saveHighscore() {
     highscore = score;
 }
+
 function saveLevel() {
     highestlvl = level;
 }
 
 function manageGameAcceleration() {
-    if (mode ==="classic") {
+    if (mode === "classic") {
         if (molesClickCounter >= numberOfClicksBeforeAcceleration) {
             molesClickCounter = 0;
-            generationPeriod = generationPeriod / coeff ;
+            generationPeriod = generationPeriod / coeff;
             clearInterval(intervalId);
             console.log("generationPeriod in interval function", generationPeriod);
             runGame(generationPeriod);
         }
-    }
-    else if (mode === "survival") {
+    } else if (mode === "survival") {
         if (molesClickCounter >= numberOfClicksBeforeLevelUp) {
             molesClickCounter = 0;
             level++;
-            console.log(level);
             lvlsound.play();
+            updateInfo();
         }
     }
 }
@@ -388,12 +401,11 @@ function manageGameAcceleration() {
 //Highscore !
 function displayModalHiscore() {
     modal.style.display = "block";
-    if(mode!=="survival") {
+    if (mode !== "survival") {
         modal.querySelector("p").innerText = `Highscore !!!
         Score : ${score} pts
         Playtime : ${playtime}s`;
-    }
-    else {
+    } else {
         modal.querySelector("p").innerText = `Highscore !!!
         Level : ${level} 
         Playtime : ${playtime}s`;
@@ -403,31 +415,35 @@ function displayModalHiscore() {
 // YOU LOSE MODAL
 function displayModalYouLose() {
     modal.style.display = "block";
-    if(mode!=="survival") {
-    modal.querySelector("p").innerText = `You lose !
+    if (mode !== "survival") {
+        modal.querySelector("p").innerText = `You lose !
     Score : ${score} pts
     Playtime : ${playtime}s`;
-    }
-    else{
-    modal.querySelector("p").innerText = `You lose !
+    } else {
+        modal.querySelector("p").innerText = `You lose !
     level : ${level} 
     Playtime : ${playtime}s`;
     }
 
 }
 
-function displayModalReady() {
+function displayModalReady(displayTimeInMs) {
     modal.style.display = "block";
-    if(mode!=="survival") {
-    modal.querySelector("p").innerText = `You lose !
-    Score : ${score} pts
-    Playtime : ${playtime}s`;
-    }
-    else{
-    modal.querySelector("p").innerText = `You lose !
-    level : ${level} 
-    Playtime : ${playtime}s`;
-    }
+
+    
+    let timerInSec = displayTimeInMs ===undefined ? 5: displayTimeInMs /1000;
+    modal.querySelector("p").innerText = `Starting in ${timerInSec} s...
+    Good luck !!! :P`;
+    let id = setInterval(() => {
+        timerInSec--;
+        
+        modal.querySelector("p").innerText = `Starting in ${timerInSec} s...
+        Good luck !!! :P`;
+        if (timerInSec <1) {
+            clearInterval(id);
+            modal.style.display = "none"
+        }
+    }, 1000)
 }
 
 span.onclick = function () {
@@ -435,14 +451,14 @@ span.onclick = function () {
 }
 
 ///////////////////////////////////////////////////Cursor Animation
-window.onmousemove = function(e){
+window.onmousemove = function (e) {
     // console.log("move", e.clientX, e.clientY);
     cursor.style.left = e.clientX - 10 + 'px';
     cursor.style.top = e.clientY - 40 + 'px';
 }
 
-window.onclick = function(e){
+window.onclick = function (e) {
     // console.log("move", e.clientX, e.clientY);
     cursor.classList.add("hammer-rotate")
-    setTimeout( () => cursor.classList.remove("hammer-rotate"), 200)
+    setTimeout(() => cursor.classList.remove("hammer-rotate"), 200)
 }
