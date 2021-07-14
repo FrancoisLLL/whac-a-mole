@@ -20,6 +20,7 @@ const easyButton = document.getElementById("easy");
 const classicButton = document.getElementById("classic");
 const hardcoreButton = document.getElementById("hardcore");
 const backButton = document.getElementById("back");
+const soundButton = document.getElementById("sound");
 
 //Modal
 const modal = document.getElementById("modal");
@@ -37,9 +38,9 @@ const gameover = document.getElementById("gameover");
 const button = document.getElementById("button");
 
 const gameCoeff = {
-    easy: 1.1,
-    classic: 1.15,
-    hardcore: 1.3
+    easy: 1.0,
+    classic: 1.1,
+    hardcore: 1.2
 }
 
 const gameWinningPointsToReach = {
@@ -65,11 +66,11 @@ let mode = "easy";
 let intervalId = 0;
 let timeIntervalId = 0;
 // Music setup
-music.volume = 0.1;
+music.volume = 0.05;
 hit.volume = 0.1;
 miss.volume = 0.1;
 button.volume = 0.1;
-win.volume = 0.15;
+win.volume = 0.1;
 gameover.volume = 0.15;
 
 //////////////////////////////////////////////////////////Event listeners
@@ -113,6 +114,32 @@ hardcoreButton.onclick = function () {
     button.play();
 };
 
+soundButton.onclick = function () {
+    button.play();
+    if(soundButton.classList.contains("mute"))
+    {
+        music.volume = 0.05;
+        hit.volume = 0.1;
+        miss.volume = 0.1;
+        button.volume = 0.1;
+        win.volume = 0.1;
+        gameover.volume = 0.15;
+        music.play();
+        soundButton.classList.remove("mute");
+    }
+    else{
+        music.volume = 0;
+        hit.volume = 0;
+        miss.volume = 0;
+        setTimeout(() => {
+            button.volume = 0;
+        }, 100);
+        win.volume = 0;
+        gameover.volume = 0;
+        soundButton.classList.add("mute");
+    }
+};
+
 //////////////////////////////////////////////Functions
 
 function hideHome() {
@@ -145,7 +172,7 @@ function moleGetOut(mole) {
     mole.classList.add("getOut");
     mole.classList.remove("getIn");
     mole.querySelectorAll(".eye").forEach((item) => item.classList.remove("scaredEye"));
-    // mole.querySelectorAll(".mouth").forEach((item) => item.classList.remove("scaredMouth"));
+    mole.querySelectorAll(".mouth").forEach((item) => item.classList.remove("scaredMouth"));
 
 
 }
@@ -155,7 +182,7 @@ function moleGetIn(mole) {
     mole.classList.add("getIn");
     mole.classList.remove("getOut");
     mole.querySelectorAll(".eye").forEach((item) => item.classList.add("scaredEye"));
-    // mole.querySelectorAll(".mouth").forEach((item) => item.classList.add("scaredMouth"));
+    mole.querySelectorAll(".mouth").forEach((item) => item.classList.add("scaredMouth"));
 
 }
 
@@ -234,7 +261,7 @@ function runGame() {
         if (randomMole !== undefined) {
             moleGetOut(randomMole);
         }
-        if (molesClickCounter > numberOfClicksBeforeLevelUp) {
+        if (molesClickCounter >= numberOfClicksBeforeLevelUp) {
             molesClickCounter = 0;
             level++;
             generationPeriod = generationPeriod / coeff ;
@@ -261,7 +288,7 @@ function checkGameEnd() {
 
 function stopGame() {
     const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
-    music.pause();
+    // music.pause();
 
     displayEndgameModal(holesLeft);
 
@@ -348,8 +375,8 @@ span.onclick = function () {
 
 window.onmousemove = function(e){
     // console.log("move", e.clientX, e.clientY);
-    cursor.style.left = e.clientX - 15 + 'px';
-    cursor.style.top = e.clientY - 45 + 'px';
+    cursor.style.left = e.clientX - 10 + 'px';
+    cursor.style.top = e.clientY - 40 + 'px';
 }
 
 window.onclick = function(e){

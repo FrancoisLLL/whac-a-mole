@@ -12,7 +12,7 @@
     text-align: center;
     margin: auto;
     font-family: 'Press Start 2P', cursive;
-    cursor: none;
+    /* cursor: none; */
 }
 
 /* HOMESCREEN */
@@ -31,8 +31,8 @@
 h1 {
     font-size: 5em;
     font-family: "pac-font";
-    padding-top: 15vh;
-    margin-bottom: 20%;
+    padding-top: 7vh;
+    padding-bottom: 7vh;
 }
 
 h3 {
@@ -40,10 +40,22 @@ h3 {
     font-size: 1em;
 }
 
+#sound {
+    height: 80px;
+    width: 200px;
+
+    font-size: xx-small;
+    margin-top: 8vh;
+    border: none;
+    background-color: white;
+}
+
+
 .footer {
     font-size: xx-small;
-    padding-top: 20vh;
+    margin-top: 2vh;
 }
+
 
 /* Main */
 #header {
@@ -107,7 +119,7 @@ h2 {
 /* The Modal (background) */
 .modal {
     display: none;
-    background-color:rgb(0, 0, 0,0.5);
+    background-color: rgb(0, 0, 0, 0.5);
     position: fixed;
     left: 0;
     top: 0;
@@ -160,11 +172,12 @@ h2 {
     animation: animatedgradient 3s ease alternate infinite;
     background-size: 300% 300%;
 }
+
 #cursor {
     position: fixed;
     top: 400px;
     left: 600px;
-    z-index:200;
+    z-index: 200;
     transform: rotate(-15deg);
     pointer-events: none;
 
@@ -190,7 +203,7 @@ h2 {
 }
 
 .hammer-rotate {
-    animation: hammerknock 1s ease;
+    animation: hammerknock 0.2s ease;
 }
 
 @keyframes animatedgradient {
@@ -209,12 +222,15 @@ h2 {
 
 
 @keyframes hammerknock {
-    0%, 100% {
-        transform: rotate(-25deg);
 
+    0%,
+    100% {
+        transform: rotate(0deg);
+        transform-origin: bottom right;
     }
 
     50% {
-        transform: rotate(-95deg);
+        transform: rotate(-65deg);
+        transform-origin: bottom right;
     }
 }
