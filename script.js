@@ -41,7 +41,7 @@ const readygo = document.getElementById("readygo");
 
 
 //Francois : create object ?
-const numberOfClicksBeforeLevelUp = 10;
+const numberOfClicksBeforeLevelUp = 20;
 const numberOfClicksBeforeAcceleration = 5;
 const easyInitGenerationPeriod = 600;
 const classicInitGenerationPeriod = 600;
@@ -64,14 +64,14 @@ let intervalId = 0;
 let timeIntervalId = 0;
 
 // Music setup
-music.volume = 0.05;
+music.volume = 0.03;
 hit.volume = 0.1;
 miss.volume = 0.1;
 button.volume = 0.1;
 win.volume = 0.1;
 gameover.volume = 0.15;
-lvlsound.volume = 0.1;
-readygo.volume = 0.1;
+lvlsound.volume = 0.05;
+readygo.volume = 0.5;
 
 
 
@@ -113,13 +113,14 @@ survivalButton.onclick = function () {
 soundButton.onclick = function () {
     button.play();
     if (soundButton.classList.contains("mute")) {
-        music.volume = 0.05;
+        music.volume = 0.03;
         hit.volume = 0.1;
         miss.volume = 0.1;
         button.volume = 0.1;
         win.volume = 0.1;
         gameover.volume = 0.15;
-        readygo.volume = 0.1;
+        lvlsound.volume = 0.05;
+        readygo.volume = 0.5;
         music.play();
         soundButton.classList.remove("mute");
     } else {
@@ -132,6 +133,8 @@ soundButton.onclick = function () {
         win.volume = 0;
         gameover.volume = 0;
         readygo.volume = 0;
+        lvlsound.volume = 0;
+
         soundButton.classList.add("mute");
     }
 };
