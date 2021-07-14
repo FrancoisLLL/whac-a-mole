@@ -37,8 +37,7 @@ const win = document.getElementById("win");
 const gameover = document.getElementById("gameover");
 const button = document.getElementById("button");
 const lvlsound = document.getElementById("lvlsound");
-const ready = document.getElementById("ready");
-const go = document.getElementById("go");
+const readygo = document.getElementById("readygo");
 
 
 //Francois : create object ?
@@ -72,8 +71,7 @@ button.volume = 0.1;
 win.volume = 0.1;
 gameover.volume = 0.15;
 lvlsound.volume = 0.1;
-ready.volume = 0.1;
-go.volume = 0.1;
+readygo.volume = 0.1;
 
 
 
@@ -121,8 +119,7 @@ soundButton.onclick = function () {
         button.volume = 0.1;
         win.volume = 0.1;
         gameover.volume = 0.15;
-        ready.volume = 0.1;
-        go.volume = 0.1;
+        readygo.volume = 0.1;
         music.play();
         soundButton.classList.remove("mute");
     } else {
@@ -134,8 +131,7 @@ soundButton.onclick = function () {
         }, 100);
         win.volume = 0;
         gameover.volume = 0;
-        ready.volume = 0;
-        go.voulme = 0;
+        readygo.volume = 0;
         soundButton.classList.add("mute");
     }
 };
@@ -236,12 +232,11 @@ function startGame() {
     displayModalReady(startDelayInMs);
 
     initGame();
-    ready.play(); 
+    readygo.play(); 
 
     setTimeout( () => {
         
         runGame();
-        go.play();
     }, startDelayInMs);
     
 }
