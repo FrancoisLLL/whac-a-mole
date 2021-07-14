@@ -43,20 +43,26 @@ const button = document.getElementById("button");
 //Francois : better to create Object Game ?
 const numberOfClicksBeforeLevelUp = 20;
 const numberOfClicksBeforeAcceleration = 20;
+const easyInitGenerationPeriod = 700;
+const classicInitGenerationPeriod = 550;
+const survivalInitGenerationPeriod = 400;
+const classicCoeff = 1.05;
+
 let startTime = new Date();
 let playtime = 0;
-let generationPeriod = 800;
-let coeff = 1.10;
+let generationPeriod = 0;
+let coeff = 0;
 let molesClickCounter = 0;
 let score = 0;
 let level = 1;
 let gameOn = false;
 let highscore = 2000;
 let highestlvl = 3;
-let mode = "easy";
+let mode = "";
 
 let intervalId = 0;
 let timeIntervalId = 0;
+
 // Music setup
 music.volume = 0.05;
 hit.volume = 0.1;
@@ -88,7 +94,6 @@ easyButton.onclick = function () {
 
 classicButton.onclick = function () {
     hideHome();
-    coeff = 1.05;
     mode = "classic";
     startGame();
     button.play();
@@ -97,7 +102,6 @@ classicButton.onclick = function () {
 survivalButton.onclick = function () {
     hideHome();
     mode = "survival";
-
     startGame();
     button.play();
 };
@@ -129,6 +133,28 @@ soundButton.onclick = function () {
 };
 
 //////////////////////////////////////////////Functions
+
+
+function initGameVar () {
+    if(mode ==="survival") {
+        generationPeriod = survivalInitGenerationPeriod;
+    }
+    else if (mode==="classic")
+    {
+        generationPeriod = classicInitGenerationPeriod;
+        coeff = classicCoeff;
+    }
+    else {
+        generationPeriod = easyInitGenerationPeriod
+    }
+    console.log(mode);
+    console.log(generationPeriod);
+    molesClickCounter = 0;
+    playtime = 0;
+    score = 0;
+    level = 1;
+    gameOn = true;
+}
 
 function hideHome() {
     sectionHome.classList.add("hidden");
@@ -233,7 +259,7 @@ function updateTime() {
     playtimeElement.innerHTML = 'Playtime: ' + playtime + "s";
 }
 
-function countPlaytime() {
+function startTimer() {
      timeIntervalId = setInterval( () => {
         playtime = Math.floor((new Date() - startTime) / 1000);
         updateTime();
@@ -331,26 +357,18 @@ function displayEndgameModal(holesLeft) {
 function initGame() {
     startTime = new Date();
 
-    if(mode ==="survival") {
-        generationPeriod = 400;
-    }
-    else
-    {
-        generationPeriod = 600;
-    }
 
-    molesClickCounter = 0;
-    playtime = 0;
-    score = 0;
-    level = 1;
-    gameOn = true;
+
+    initGameVar();
+
     clearInterval(intervalId);
     clearInterval(timeIntervalId);
-    countPlaytime();
+    startTimer();
     initMolesClasses();
     updateInfo();
     music.play();
 }
+
 
 function isHighscore() {
     if (score > highscore) {
