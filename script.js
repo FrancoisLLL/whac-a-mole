@@ -18,7 +18,7 @@ const moles = document.querySelectorAll(".moleContainer");
 const restartButton = document.getElementById("restart");
 const easyButton = document.getElementById("easy");
 const classicButton = document.getElementById("classic");
-const hardcoreButton = document.getElementById("hardcore");
+const survivalButton = document.getElementById("survival");
 const backButton = document.getElementById("back");
 const soundButton = document.getElementById("sound");
 
@@ -37,30 +37,22 @@ const win = document.getElementById("win");
 const gameover = document.getElementById("gameover");
 const button = document.getElementById("button");
 
-const gameCoeff = {
-    easy: 1.0,
-    classic: 1.1,
-    hardcore: 1.2
-}
 
-const gameWinningPointsToReach = {
-    easy: 3000,
-    classic: Number.MAX_VALUE,
-    hardcore: Number.MAX_VALUE
-}
+
 
 //Francois : better to create Object Game ?
-let numberOfClicksBeforeLevelUp = 10;
-let winningScore = 1000;
+const numberOfClicksBeforeLevelUp = 20;
+const numberOfClicksBeforeAcceleration = 20;
 let startTime = new Date();
 let playtime = 0;
-let generationPeriod = 1000;
+let generationPeriod = 800;
 let coeff = 1.10;
 let molesClickCounter = 0;
 let score = 0;
 let level = 1;
 let gameOn = false;
 let highscore = 2000;
+let highestlvl = 3;
 let mode = "easy";
 
 let intervalId = 0;
@@ -89,8 +81,6 @@ backButton.onclick = function () {
 
 easyButton.onclick = function () {
     hideHome();
-    coeff = gameCoeff.easy;
-    winningScore = gameWinningPointsToReach.easy;
     mode = "easy";
     startGame();
     button.play();
@@ -98,18 +88,16 @@ easyButton.onclick = function () {
 
 classicButton.onclick = function () {
     hideHome();
-    coeff = gameCoeff.classic;
-    winningScore = gameWinningPointsToReach.classic;
+    coeff = 1.05;
     mode = "classic";
     startGame();
     button.play();
 };
 
-hardcoreButton.onclick = function () {
+survivalButton.onclick = function () {
     hideHome();
-    coeff = gameCoeff.hardcore;
-    winningScore = gameWinningPointsToReach.hardcore;
-    mode = "hardcore";
+    mode = "survival";
+
     startGame();
     button.play();
 };
@@ -205,9 +193,11 @@ function killMole(event) {
 }
 
 function increaseScore() {
-    let divider = generationPeriod / 10000;
-    score += Math.floor(1/ (divider ** 2));
-    return score;
+    if (mode !=="survival")
+    {
+        let divider = generationPeriod / 10000;
+        score += Math.floor(1/ (divider ** 2));
+    }
 }
 
 function updateInfo() {
@@ -218,7 +208,12 @@ function updateInfo() {
 }
 
 function updateScore() {
-    scoreElement.innerHTML = 'Score: ' + score + "pts";
+    if(mode != "survival"){
+        scoreElement.innerHTML = 'Score: ' + score + "pts";
+    }
+    else{
+        scoreElement.innerHTML = 'Level: ' + level;
+    }
 }
 
 function updateMode() {
@@ -226,7 +221,12 @@ function updateMode() {
 }
 
 function updateHighscore() {
-    highscoreElement.innerHTML = 'Highscore: ' + highscore + "pts";
+    if(mode != "survival"){
+        highscoreElement.innerHTML = 'Highest: ' + highscore + "pts";
+    }
+    else{
+        highscoreElement.innerHTML = 'Highest lvl: ' + highestlvl;
+    }
 }
 
 function updateTime() {
@@ -261,14 +261,8 @@ function runGame() {
         if (randomMole !== undefined) {
             moleGetOut(randomMole);
         }
-        if (molesClickCounter >= numberOfClicksBeforeLevelUp) {
-            molesClickCounter = 0;
-            level++;
-            generationPeriod = generationPeriod / coeff ;
-            clearInterval(intervalId);
-            console.log("generationPeriod in interval function", generationPeriod);
-            runGame(generationPeriod);
-        }
+        
+        manageGameAcceleration();
 
         checkGameEnd();
 
@@ -277,10 +271,29 @@ function runGame() {
     return intervalId;
 }
 
+function manageGameAcceleration() {
+    if (mode ==="classic") {
+        if (molesClickCounter >= numberOfClicksBeforeAcceleration) {
+            molesClickCounter = 0;
+            generationPeriod = generationPeriod / coeff ;
+            clearInterval(intervalId);
+            console.log("generationPeriod in interval function", generationPeriod);
+            runGame(generationPeriod);
+        }
+    }
+    else if (mode === "survival") {
+        if (molesClickCounter >= numberOfClicksBeforeLevelUp) {
+            molesClickCounter = 0;
+            level++;
+            console.log(level);
+        }
+    }
+}
+
 function checkGameEnd() {
     const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
 
-    if ((holesLeft.length === 0 || score >= winningScore)) {
+    if ((holesLeft.length === 0)) {
         stopGame();
         return true;
     }
@@ -293,7 +306,7 @@ function stopGame() {
     displayEndgameModal(holesLeft);
 
     //Push mole transition back to position
-    setTimeout(moleGetInSlow,500);
+    setTimeout(moleGetInSlow, 500);
 
     clearInterval(intervalId);
     clearInterval(timeIntervalId);
@@ -311,17 +324,21 @@ function displayEndgameModal(holesLeft) {
                 displayModalYouLose();
                 gameover.play();
             }
-        } else if (score >= winningScore) {
-            win.play();
-            isHighscore(score);
-            displayModalYouWin();
         }
     }
 }
 
 function initGame() {
     startTime = new Date();
-    generationPeriod = 1000;
+
+    if(mode ==="survival") {
+        generationPeriod = 400;
+    }
+    else
+    {
+        generationPeriod = 600;
+    }
+
     molesClickCounter = 0;
     playtime = 0;
     score = 0;
@@ -340,33 +357,48 @@ function isHighscore() {
         saveHighscore();
         return true;
     }
+    if (level > highestlvl) {
+        saveLevel();
+        return true;
+    }
 }
 
 function saveHighscore() {
     highscore = score;
 }
-
-//YOU WIN
-function displayModalYouWin() {
-    modal.style.display = "block";
-    modal.querySelector("p").innerText = `You Win !!!
-    
-    Try a harder mode =D`;
+function saveLevel() {
+    highestlvl = level;
 }
+
 //Highscore !
 function displayModalHiscore() {
     modal.style.display = "block";
-    modal.querySelector("p").innerText = `Highscore !!!
-    Score : ${score} pts
-    Playtime : ${playtime}s`;
+    if(mode!=="survival") {
+        modal.querySelector("p").innerText = `Highscore !!!
+        Score : ${score} pts
+        Playtime : ${playtime}s`;
+    }
+    else {
+        modal.querySelector("p").innerText = `Highscore !!!
+        Level : ${level} 
+        Playtime : ${playtime}s`;
+    }
 }
 
 // YOU LOSE MODAL
 function displayModalYouLose() {
     modal.style.display = "block";
+    if(mode!=="survival") {
     modal.querySelector("p").innerText = `You lose !
     Score : ${score} pts
     Playtime : ${playtime}s`;
+    }
+    else{
+    modal.querySelector("p").innerText = `You lose !
+    level : ${level} 
+    Playtime : ${playtime}s`;
+    }
+
 }
 
 span.onclick = function () {
