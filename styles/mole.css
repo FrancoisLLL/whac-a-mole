@@ -117,45 +117,46 @@
 .hole:hover {
     animation: wobble-hor-bottom 0.8s both;
 }
+
 .wobble-hor-bottom {
-	-webkit-animation: wobble-hor-bottom 0.2s both;
-	        animation: wobble-hor-bottom 0.2s both;
+    -webkit-animation: wobble-hor-bottom 0.2s both;
+    animation: wobble-hor-bottom 0.2s both;
 }
 
-  @keyframes wobble-hor-bottom {
+@keyframes wobble-hor-bottom {
+
     0%,
     100% {
-      -webkit-transform: translateX(0%);
-              transform: translateX(0%);
-      -webkit-transform-origin: 50% 50%;
-              transform-origin: 50% 50%;
+        -webkit-transform: translateX(0%);
+        transform: translateX(0%);
+        -webkit-transform-origin: 50% 50%;
+        transform-origin: 50% 50%;
     }
-    15% {
-      -webkit-transform: translateX(-5px) rotate(-2deg);
-              transform: translateX(-5px) rotate(-2deg);
-    }
-    30% {
-      -webkit-transform: translateX(4px) rotate(2deg);
-              transform: translateX(4px) rotate(2deg);
-    }
-    45% {
-      -webkit-transform: translateX(-4px) rotate(-1deg);
-              transform: translateX(-4px) rotate(-1deg);
-    }
-    60% {
-      -webkit-transform: translateX(3px) rotate(1deg);
-              transform: translateX(3px) rotate(1deg);
-    }
-    75% {
-      -webkit-transform: translateX(-2px) rotate(-1deg);
-              transform: translateX(-2px) rotate(-1deg);
-    }
-  }
-  
 
-  
-.scaredEye {
-    animation: hit 0.1s cubic-bezier(.36, .07, .19, .97);
+    15% {
+        -webkit-transform: translateX(-5px) rotate(-2deg);
+        transform: translateX(-5px) rotate(-2deg);
+    }
+
+    30% {
+        -webkit-transform: translateX(4px) rotate(2deg);
+        transform: translateX(4px) rotate(2deg);
+    }
+
+    45% {
+        -webkit-transform: translateX(-4px) rotate(-1deg);
+        transform: translateX(-4px) rotate(-1deg);
+    }
+
+    60% {
+        -webkit-transform: translateX(3px) rotate(1deg);
+        transform: translateX(3px) rotate(1deg);
+    }
+
+    75% {
+        -webkit-transform: translateX(-2px) rotate(-1deg);
+        transform: translateX(-2px) rotate(-1deg);
+    }
 }
 
 @keyframes squink {

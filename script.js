@@ -36,17 +36,16 @@ const miss = document.getElementById("miss");
 const win = document.getElementById("win");
 const gameover = document.getElementById("gameover");
 const button = document.getElementById("button");
+const lvlsound = document.getElementById("lvlsound");
 
 
-
-
-//Francois : better to create Object Game ?
-const numberOfClicksBeforeLevelUp = 20;
-const numberOfClicksBeforeAcceleration = 20;
-const easyInitGenerationPeriod = 700;
-const classicInitGenerationPeriod = 550;
-const survivalInitGenerationPeriod = 400;
-const classicCoeff = 1.05;
+//Francois : create object ?
+const numberOfClicksBeforeLevelUp = 10;
+const numberOfClicksBeforeAcceleration = 5;
+const easyInitGenerationPeriod = 600;
+const classicInitGenerationPeriod = 600;
+const survivalInitGenerationPeriod = 420;
+const classicCoeff = 1.01;
 
 let startTime = new Date();
 let playtime = 0;
@@ -70,6 +69,7 @@ miss.volume = 0.1;
 button.volume = 0.1;
 win.volume = 0.1;
 gameover.volume = 0.15;
+lvlsound.volume = 0.1;
 
 //////////////////////////////////////////////////////////Event listeners
 moles.forEach((item) => item.addEventListener('click', killMole));
@@ -156,6 +156,7 @@ function initGameVar () {
     gameOn = true;
 }
 
+/////////////////////////// SPA
 function hideHome() {
     sectionHome.classList.add("hidden");
     sectionMain.classList.remove("hidden");
@@ -166,6 +167,7 @@ function hideMainGame() {
     sectionMain.classList.add("hidden");
 }
 
+///////////////////////// Class for Animations / Transition
 function initMolesClasses() {
     moles.forEach((child) => child.classList.remove("getInSlow"));
     moles.forEach((child) => child.classList.remove("active"));
@@ -173,7 +175,6 @@ function initMolesClasses() {
     moles.forEach((child) => child.classList.remove("getIn"));
 
 }
-
 
 function moleGetInSlow() {
     moles.forEach((child) => child.classList.add("getInSlow"));
@@ -185,21 +186,76 @@ function moleGetOut(mole) {
     mole.classList.add("active");
     mole.classList.add("getOut");
     mole.classList.remove("getIn");
-    mole.querySelectorAll(".eye").forEach((item) => item.classList.remove("scaredEye"));
-    mole.querySelectorAll(".mouth").forEach((item) => item.classList.remove("scaredMouth"));
-
-
 }
 
 function moleGetIn(mole) {
     mole.classList.remove("active");
     mole.classList.add("getIn");
     mole.classList.remove("getOut");
-    mole.querySelectorAll(".eye").forEach((item) => item.classList.add("scaredEye"));
-    mole.querySelectorAll(".mouth").forEach((item) => item.classList.add("scaredMouth"));
-
 }
 
+//////////////////////////////// Main functions
+
+function initGame() {
+    startTime = new Date();
+
+    initGameVar();
+
+    clearInterval(intervalId);
+    clearInterval(timeIntervalId);
+    startTimer();
+    initMolesClasses();
+    updateInfo();
+    music.play();
+}
+
+function runGame() {
+    intervalId = setInterval(() => {
+        let randomMole = randomHoleSelector();
+
+        if (randomMole !== undefined) {
+            moleGetOut(randomMole);
+        }
+        
+        manageGameAcceleration();
+
+        checkGameEnd();
+
+    }, generationPeriod)
+
+    return intervalId;
+}
+
+function startGame() {
+    initGame();
+    runGame();
+}
+
+
+function checkGameEnd() {
+    const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
+
+    if ((holesLeft.length === 0)) {
+        stopGame();
+        return true;
+    }
+}
+function stopGame() {
+    const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
+    // music.pause();
+
+    displayEndgameModal(holesLeft);
+
+    //Push mole transition back to position
+    setTimeout(moleGetInSlow, 500);
+
+    clearInterval(intervalId);
+    clearInterval(timeIntervalId);
+    updateInfo();
+    gameOn = false;
+}
+
+/////////////////////////// Gaming functions
 
 function killMole(event) {
     let mole = event.currentTarget;
@@ -248,7 +304,7 @@ function updateMode() {
 
 function updateHighscore() {
     if(mode != "survival"){
-        highscoreElement.innerHTML = 'Highest: ' + highscore + "pts";
+        highscoreElement.innerHTML = 'Highscore: ' + highscore + "pts";
     }
     else{
         highscoreElement.innerHTML = 'Highest lvl: ' + highestlvl;
@@ -275,71 +331,6 @@ function randomHoleSelector() {
     }
 }
 
-function startGame() {
-    initGame();
-    runGame();
-}
-
-function runGame() {
-    intervalId = setInterval(() => {
-        let randomMole = randomHoleSelector();
-
-        if (randomMole !== undefined) {
-            moleGetOut(randomMole);
-        }
-        
-        manageGameAcceleration();
-
-        checkGameEnd();
-
-    }, generationPeriod)
-
-    return intervalId;
-}
-
-function manageGameAcceleration() {
-    if (mode ==="classic") {
-        if (molesClickCounter >= numberOfClicksBeforeAcceleration) {
-            molesClickCounter = 0;
-            generationPeriod = generationPeriod / coeff ;
-            clearInterval(intervalId);
-            console.log("generationPeriod in interval function", generationPeriod);
-            runGame(generationPeriod);
-        }
-    }
-    else if (mode === "survival") {
-        if (molesClickCounter >= numberOfClicksBeforeLevelUp) {
-            molesClickCounter = 0;
-            level++;
-            console.log(level);
-        }
-    }
-}
-
-function checkGameEnd() {
-    const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
-
-    if ((holesLeft.length === 0)) {
-        stopGame();
-        return true;
-    }
-}
-
-function stopGame() {
-    const holesLeft = document.querySelectorAll(".moleContainer:not(.active)");
-    // music.pause();
-
-    displayEndgameModal(holesLeft);
-
-    //Push mole transition back to position
-    setTimeout(moleGetInSlow, 500);
-
-    clearInterval(intervalId);
-    clearInterval(timeIntervalId);
-    updateInfo();
-    gameOn = false;
-}
-
 function displayEndgameModal(holesLeft) {
     if (gameOn ===true) {
         if (holesLeft.length ===0) {
@@ -352,21 +343,6 @@ function displayEndgameModal(holesLeft) {
             }
         }
     }
-}
-
-function initGame() {
-    startTime = new Date();
-
-
-
-    initGameVar();
-
-    clearInterval(intervalId);
-    clearInterval(timeIntervalId);
-    startTimer();
-    initMolesClasses();
-    updateInfo();
-    music.play();
 }
 
 
@@ -388,6 +364,27 @@ function saveLevel() {
     highestlvl = level;
 }
 
+function manageGameAcceleration() {
+    if (mode ==="classic") {
+        if (molesClickCounter >= numberOfClicksBeforeAcceleration) {
+            molesClickCounter = 0;
+            generationPeriod = generationPeriod / coeff ;
+            clearInterval(intervalId);
+            console.log("generationPeriod in interval function", generationPeriod);
+            runGame(generationPeriod);
+        }
+    }
+    else if (mode === "survival") {
+        if (molesClickCounter >= numberOfClicksBeforeLevelUp) {
+            molesClickCounter = 0;
+            level++;
+            console.log(level);
+            lvlsound.play();
+        }
+    }
+}
+
+/////////////////////////////////////////////////////////////Modals
 //Highscore !
 function displayModalHiscore() {
     modal.style.display = "block";
@@ -423,6 +420,7 @@ span.onclick = function () {
     modal.style.display = "none";
 }
 
+///////////////////////////////////////////////////Cursor Animation
 window.onmousemove = function(e){
     // console.log("move", e.clientX, e.clientY);
     cursor.style.left = e.clientX - 10 + 'px';
@@ -434,8 +432,3 @@ window.onclick = function(e){
     cursor.classList.add("hammer-rotate")
     setTimeout( () => cursor.classList.remove("hammer-rotate"), 200)
 }
-// window.onclick = function (event) {
-//     if (event.target == modal) {
-//         modal.style.display = "none";
-//     }
-// }
