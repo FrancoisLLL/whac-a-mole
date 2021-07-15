@@ -1,6 +1,7 @@
 :root {
     --vertical-offset: -75%;
     --max-width: 100px;
+    --max-height: 300px;
 }
 
 /* lid */
