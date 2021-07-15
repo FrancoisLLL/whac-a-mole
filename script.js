@@ -45,7 +45,7 @@ const numberOfClicksBeforeLevelUp = 20;
 const numberOfClicksBeforeAcceleration = 5;
 const easyInitGenerationPeriod = 600;
 const classicInitGenerationPeriod = 600;
-const survivalInitGenerationPeriod = 420;
+const survivalInitGenerationPeriod = 380;
 const classicCoeff = 1.03;
 
 let startTime = new Date();
