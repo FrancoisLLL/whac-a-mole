@@ -200,8 +200,6 @@ function moleGetIn(mole) {
 //////////////////////////////// Main functions
 
 function initGame() {
-    
-    console.log(startTime);
     initGameVar();
     clearInterval(intervalId);
     clearInterval(timeIntervalId);
@@ -231,17 +229,17 @@ function runGame() {
 
 function startGame() {
     let startDelayInMs = 3000;
-    displayModalReady(startDelayInMs);
+    displayModalReady(startDelayInMs); // could add modal setTimeout that is called below as callback
 
     initGame();
-    readygo.play(); 
+    readygo.play();
 
-    setTimeout( () => {
+    setTimeout(() => {
         startTime = new Date();
         startTimer();
         runGame();
     }, startDelayInMs);
-    
+
 }
 
 
@@ -428,16 +426,16 @@ function displayModalYouLose() {
 function displayModalReady(displayTimeInMs) {
     modal.style.display = "block";
 
-    
-    let timerInSec = displayTimeInMs ===undefined ? 5: displayTimeInMs /1000;
+
+    let timerInSec = displayTimeInMs === undefined ? 5 : displayTimeInMs / 1000;
     modal.querySelector("p").innerText = `Starting in ${timerInSec} s...
     Good luck !!! :P`;
     let id = setInterval(() => {
         timerInSec--;
-        
+
         modal.querySelector("p").innerText = `Starting in ${timerInSec} s...
         Good luck !!! :P`;
-        if (timerInSec <1) {
+        if (timerInSec < 1) {
             clearInterval(id);
             modal.style.display = "none"
         }
@@ -450,13 +448,11 @@ span.onclick = function () {
 
 ///////////////////////////////////////////////////Cursor Animation
 window.onmousemove = function (e) {
-    // console.log("move", e.clientX, e.clientY);
     cursor.style.left = e.clientX - 10 + 'px';
     cursor.style.top = e.clientY - 40 + 'px';
 }
 
 window.onclick = function (e) {
-    // console.log("move", e.clientX, e.clientY);
     cursor.classList.add("hammer-rotate")
     setTimeout(() => cursor.classList.remove("hammer-rotate"), 200)
 }

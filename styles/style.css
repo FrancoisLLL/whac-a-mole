@@ -90,7 +90,10 @@ h2 {
     display: flex;
     flex-wrap: wrap;
     width: 80%;
-    height: 500px;
+
+    height: 60vh;
+    min-height: 500px;
+
     padding-bottom: 70px;
     background-color: black;
     margin-bottom: 15px;

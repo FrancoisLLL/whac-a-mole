@@ -10,7 +10,6 @@
     background-color: black;
     width: 70%;
     max-width: var(--max-width);
-
     position: relative;
 }
 
@@ -96,6 +95,7 @@
 
 .moleContainer {
     height: 100%;
+    max-height: var(--max-height);
 }
 
 /* Transitions */
