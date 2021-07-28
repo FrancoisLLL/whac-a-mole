@@ -43,7 +43,7 @@ const readygo = document.getElementById("readygo");
 //Francois : create object ?
 const numberOfClicksBeforeLevelUp = 20;
 const numberOfClicksBeforeAcceleration = 5;
-const easyInitGenerationPeriod = 900;
+const easyInitGenerationPeriod = 1200;
 const classicInitGenerationPeriod = 600;
 const survivalInitGenerationPeriod = 380;
 const classicCoeff = 1.03;
